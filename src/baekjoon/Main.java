@@ -1,107 +1,95 @@
 package baekjoon;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Scanner;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		// 1026번 
-		// 보물
-		// https://www.acmicpc.net/problem/1026
+		// 2908번 
+		// 상수
+		// https://www.acmicpc.net/problem/2908
 		
 		// 문제
 		/*
-			옛날 옛적에 수학이 항상 큰 골칫거리였던 나라가 있었다. 이 나라의 국왕 김지민은 다음과 같은 문제를 내고 큰 상금을 걸었다.
-
-			길이가 N인 정수 배열 A와 B가 있다. 다음과 같이 함수 S를 정의하자.
-
-			S = A[0] × B[0] + ... + A[N-1] × B[N-1]
-
-			S의 값을 가장 작게 만들기 위해 A의 수를 재배열하자. 단, B에 있는 수는 재배열하면 안 된다.
+			상근이의 동생 상수는 수학을 정말 못한다. 
+			상수는 숫자를 읽는데 문제가 있다. 
+			이렇게 수학을 못하는 상수를 위해서 상근이는 
 			
-			S의 최솟값을 출력하는 프로그램을 작성하시오.
+			수의 크기를 비교하는 문제를 내주었다. 
+			상근이는 세 자리 수 두 개를 칠판에 써주었다. 그 다음에 크기가 큰 수를 말해보라고 했다.
+
+			상수는 수를 다른 사람과 다르게 거꾸로 읽는다. 
+			예를 들어, 734와 893을 칠판에 적었다면, 상수는 이 수를 437과 398로 읽는다. 
+			따라서, 상수는 두 수중 큰 수인 437을 큰 수라고 말할 것이다.
+			
+			두 수가 주어졌을 때, 상수의 대답을 출력하는 프로그램을 작성하시오.
 		*/
 		
 		// 입력
 		/*
-			첫째 줄에 N이 주어진다. 
-			둘째 줄에는 A에 있는 N개의 수가 순서대로 주어지고, 
-			셋째 줄에는 B에 있는 수가 순서대로 주어진다. 
-			N은 50보다 작거나 같은 자연수이고, 
-			A와 B의 각 원소는 100보다 작거나 같은 음이 아닌 정수이다.
+			첫째 줄에 상근이가 칠판에 적은 두 수 A와 B가 주어진다. 
+			두 수는 같지 않은 세 자리 수이며, 0이 포함되어 있지 않다.
 		*/
 		
 		// 출력
 		/*
-		 	첫째 줄에 S의 최솟값을 출력한다. 
+		 	첫째 줄에 상수의 대답을 출력한다.
 		*/
 			
 		// 예제 입력
 		/* 
-			5
-			1 1 1 6 0
-			2 7 8 3 1
+			734 893
 		*/
 		
-		
+		// 답
+		/* 
+		 	437 
+		*/
+
 		Scanner sc = new Scanner(System.in);
 		
-		// S = A[0] × B[0] + ... + A[N-1] × B[N-1]
-		// S의 값을 가장 작게 만들기 위해 A의 수를 재배열
-		// S의 최솟값을 출력
+		// 734와 893을 칠판에 적었다면, 상수는 이 수를 437과 398로 읽는다. 
+		// 상수는 두 수중 큰 수인 437을 큰 수라고 말할 것이다.
+		// 숫자를 거꾸로 바꾸고 비교해서 큰 수 출력!!!!!!!!!
 
-		int n = sc.nextInt();
 		
+		// 1. 내 정답
+		int a = sc.nextInt();
+		int b = sc.nextInt();
 		
-		// 1. 배열 버전
-		// A배열 생성
-		Integer[] aArr = new Integer[n];
-		for(int i = 0; i < n; i++) {
-			aArr[i] = sc.nextInt();
+		// 1. String 형태로 변환
+		String aStr = String.valueOf(a);
+		String bStr = String.valueOf(b);
+		// 2. char 배열로 담기
+		char[] aCharArr = aStr.toCharArray();
+		char[] bCharArr = bStr.toCharArray();
+		aStr = "";
+		bStr = "";
+		// 3. 역순으로 정렬
+		for(int i = 2; i >= 0; i--) {
+			aStr += aCharArr[i];
 		}
-		// B배열 생성
-		Integer[] bArr = new Integer[n];
-		for(int j = 0; j < n; j++) {
-			bArr[j] = sc.nextInt();
+		for(int i = 2; i >= 0; i--) {
+			bStr += bCharArr[i];
 		}
+		a = Integer.parseInt(aStr);
+		b = Integer.parseInt(bStr);
 		
-		// A배열은 가장 작은 순으로 정렬
-		Arrays.sort(aArr);
-		// B배열은 가장 큰 순으로 정렬
-		Arrays.sort(bArr, Collections.reverseOrder());
-		
-		int x = 0;
-		for(int k = 0; k < n; k++) {
-			x += aArr[k]*bArr[k];
-		}
+		System.out.println(Math.max(a, b));
 		
 		
-//		// 2. 리스트 버전
-//		// A리스트 생성
-//		List<Integer> aList = new ArrayList<Integer>();
-//		for(int i = 0; i < n; i++) {
-//			aList.add(sc.nextInt());
-//		}
-//		// B리스트 생성
-//		List<Integer> bList = new ArrayList<Integer>();
-//		for(int i = 0; i < n; i++) {
-//			bList.add(sc.nextInt());
-//		}
-//		// A리스트는 가장 작은 순으로 정렬
-//		Collections.sort(aList);
-//		// B리스트는 가장 큰 순으로 정렬
-//		Collections.sort(bList, Collections.reverseOrder());
+		// 2. 더 나은 정답
+//		// StringBuilder의 reverse 매서드를 이용하는 방법
 //		
-//		int x = 0;
-//		for(int k = 0; k < n; k++) {
-//			x += aList.get(k)*bList.get(k);
-//		}
-		
-		System.out.println(x);
-		
+//		int A = sc.nextInt();
+//		int B = sc.nextInt();
+//        
+//		A = Integer.parseInt(new StringBuilder().append(A).reverse().toString());
+//		B = Integer.parseInt(new StringBuilder().append(B).reverse().toString());
+//		
+//		System.out.print(A > B ? A : B);  // Math 유틸을 이용하지 않고 삼항연산자로 처리
+
 		sc.close();
 	}
 
