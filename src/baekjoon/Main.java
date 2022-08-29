@@ -1,54 +1,92 @@
 package baekjoon;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		// 2693번 
-		// N번째 큰 수
+		// 1712번 
+		// 손익분기점
+		// https://www.acmicpc.net/problem/1712
 		
 		// 문제
 		/*
-		 배열 A가 주어졌을 때, N번째 큰 값을 출력하는 프로그램을 작성하시오.
-		 배열 A의 크기는 항상 10이고, 자연수만 가지고 있다. N은 항상 3이다.
+			월드전자는 노트북을 제조하고 판매하는 회사이다. 노트북 판매 대수에 상관없이 매년 임대료, 재산세, 보험료, 급여 등 A만원의 고정 비용이 들며, 한 대의 노트북을 생산하는 데에는 재료비와 인건비 등 총 B만원의 가변 비용이 든다고 한다.
+
+			예를 들어 A=1,000, B=70이라고 하자. 이 경우 노트북을 한 대 생산하는 데는 총 1,070만원이 들며, 열 대 생산하는 데는 총 1,700만원이 든다.
+
+			노트북 가격이 C만원으로 책정되었다고 한다. 일반적으로 생산 대수를 늘려 가다 보면 어느 순간 총 수입(판매비용)이 총 비용(=고정비용+가변비용)보다 많아지게 된다. 
+			
+			최초로 총 수입이 총 비용보다 많아져 이익이 발생하는 지점을 손익분기점(BREAK-EVEN POINT)이라고 한다.
+
+			A, B, C가 주어졌을 때, 손익분기점을 구하는 프로그램을 작성하시오.
 		*/
 		
 		// 입력
 		/*
-		 * 첫째 줄에 테스트 케이스의 개수 T(1 ≤ T ≤ 1,000)가 주어진다. 각 테스트 케이스는 한 줄로 이루어져 있고, 배열 A의 원소
-		 * 10개가 공백으로 구분되어 주어진다. 이 원소는 1보다 크거나 같고, 1,000보다 작거나 같은 자연수이다.
-		 */
+			첫째 줄에 A, B, C가 빈 칸을 사이에 두고 순서대로 주어진다. A, B, C는 21억 이하의 자연수이다.
+		*/
 		
 		// 출력
-		/* 각 테스트 케이스에 대해 한 줄에 하나씩 배열 A에서 3번째 큰 값을 출력한다. */
+		/*
+		 	첫 번째 줄에 손익분기점 즉 최초로 이익이 발생하는 판매량을 출력한다. 손익분기점이 존재하지 않으면 -1을 출력한다. 
+		*/
 			
 		// 예제 입력
-//		4
-//		1 2 3 4 5 6 7 8 9 1000
-//		338 304 619 95 343 496 489 116 98 127
-//		931 240 986 894 826 640 965 833 136 138
-//		940 955 364 188 133 254 501 122 768 408
+		/* 
+			1000 70 170 
+			
+			3 2 1
+			
+			2100000000 9 10
+		*/
+		
 		
 		Scanner sc = new Scanner(System.in);
 		
-		int caseNum = sc.nextInt();
-		List<Integer> numList = new ArrayList<Integer>();
+		//A = 고정비
+		//B = 가변비
+		//C = 노트북판매가
+		//손익분기점: 최초로 총 수입이 총 비용보다 많아져 이익이 발생하는 지점     
+		// xC = (A + xB)
+		// x(C-B) = A
+		// x = A/(C-B)
+		// 이익이 나는 지점이라 하면 x 에 1 이 더해진 값
+		// 중요한 것은, x 은 총 비용과 총 수익이 같아지는 지점일 뿐, 이익이 나는 지점이 아니다!!!!!!!!!
 		
-		for(int i = 0; i < caseNum; i++) {
-			numList.clear();
-			for(int j = 0; j < 10; j++) {
-				numList.add(sc.nextInt());
-			}
-			Collections.sort(numList);
-			
-			System.out.println(numList.get(7));
+		
+		// 실패: 시간 초과
+//		long a = sc.nextInt();
+//		long b = sc.nextInt();
+//		long c = sc.nextInt();
+//		long x = 0;  // 이익이 발생하는 지점
+//		
+//		while (true) {
+//			x++;
+//			long totalIncome = x * c;
+//			long variableCost = x * b;
+//			if(c <= b) {
+//				System.out.println("-1");
+//				break;
+//			} else if(totalIncome > (a + variableCost)) {
+//				System.out.println(x);
+//				break;
+//			} 
+//		}
+		
+		// 정답
+		int A = sc.nextInt();	// 불변 비용
+		int B = sc.nextInt();	// 가변 비용
+		int C = sc.nextInt(); 	// 상품 가격
+        
+		if (C <= B) {
+			System.out.println("-1");
+		} 
+		else {
+			System.out.println((A/(C-B))+1);
 		}
-
+		
 		sc.close();
 	}
 
