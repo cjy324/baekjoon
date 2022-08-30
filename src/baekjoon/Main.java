@@ -6,89 +6,125 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		// 2908번 
-		// 상수
-		// https://www.acmicpc.net/problem/2908
+		// 2455번 
+		// 지능형 기차
+		// https://www.acmicpc.net/problem/2455
 		
 		// 문제
 		/*
-			상근이의 동생 상수는 수학을 정말 못한다. 
-			상수는 숫자를 읽는데 문제가 있다. 
-			이렇게 수학을 못하는 상수를 위해서 상근이는 
+			최근에 개발된 지능형 기차가 1번역(출발역)부터 4번역(종착역)까지
+			4개의 정차역이 있는 노선에서 운행되고 있다. 
+			이 기차에는 타거나 내리는 사람 수를 자동으로 인식할 수 있는 장치가 있다. 
+			이 장치를 이용하여 출발역에서 종착역까지 가는 도중 기차 안에 사람이 가장 많을 때의 사람 수를 계산하려고 한다. 
+			단, 이 기차를 이용하는 사람들은 질서 의식이 투철하여, 
+			역에서 기차에 탈 때, 내릴 사람이 모두 내린 후에 기차에 탄다고 가정한다.
 			
-			수의 크기를 비교하는 문제를 내주었다. 
-			상근이는 세 자리 수 두 개를 칠판에 써주었다. 그 다음에 크기가 큰 수를 말해보라고 했다.
+			예를 들어, 위와 같은 경우를 살펴보자. 
+			이 경우, 기차 안에 사람이 가장 많은 때는 2번역에서 3명의 사람이 기차에서 내리고, 
+			13명의 사람이 기차에 탔을 때로, 총 42명의 사람이 기차 안에 있다.
 
-			상수는 수를 다른 사람과 다르게 거꾸로 읽는다. 
-			예를 들어, 734와 893을 칠판에 적었다면, 상수는 이 수를 437과 398로 읽는다. 
-			따라서, 상수는 두 수중 큰 수인 437을 큰 수라고 말할 것이다.
-			
-			두 수가 주어졌을 때, 상수의 대답을 출력하는 프로그램을 작성하시오.
+			이 기차는 다음 조건을 만족하면서 운행된다고 가정한다.
+
+			기차는 역 번호 순서대로 운행한다.
+			출발역에서 내린 사람 수와 종착역에서 탄 사람 수는 0이다.
+			각 역에서 현재 기차에 있는 사람보다 더 많은 사람이 내리는 경우는 없다.
+			기차의 정원은 최대 10,000명이고, 정원을 초과하여 타는 경우는 없다.
+			4개의 역에 대해 기차에서 내린 사람 수와 탄 사람 수가 주어졌을 때, 
+			기차에 사람이 가장 많을 때의 사람 수를 계산하는 프로그램을 작성하시오.
 		*/
 		
 		// 입력
 		/*
-			첫째 줄에 상근이가 칠판에 적은 두 수 A와 B가 주어진다. 
-			두 수는 같지 않은 세 자리 수이며, 0이 포함되어 있지 않다.
+			각 역에서 내린 사람 수와 탄 사람 수가 빈칸을 사이에 두고 
+			첫째 줄부터 넷째 줄까지 역 순서대로 한 줄에 하나씩 주어진다. 
 		*/
 		
 		// 출력
 		/*
-		 	첫째 줄에 상수의 대답을 출력한다.
+		 	첫째 줄에 최대 사람 수를 출력한다. 
 		*/
 			
 		// 예제 입력
 		/* 
-			734 893
+			0 32
+			3 13
+			28 25
+			39 0
 		*/
 		
 		// 답
 		/* 
-		 	437 
+		 	42
 		*/
 
 		Scanner sc = new Scanner(System.in);
 		
-		// 734와 893을 칠판에 적었다면, 상수는 이 수를 437과 398로 읽는다. 
-		// 상수는 두 수중 큰 수인 437을 큰 수라고 말할 것이다.
-		// 숫자를 거꾸로 바꾸고 비교해서 큰 수 출력!!!!!!!!!
+		// 기차 안에 사람이 가장 많을 때의 사람 수를 계산
+		// 기차는 역 번호 순서대로 운행
+		// 출발역에서 내린 사람 수와 종착역에서 탄 사람 수는 0
+		// 각 역에서 현재 기차에 있는 사람보다 더 많은 사람이 내리는 경우는 없다.
+		// 기차의 정원은 최대 10,000명이고, 정원을 초과하여 타는 경우는 없다.
+		// 4개의 역에 대해 기차에서 내린 사람 수와 탄 사람 수가 주어졌을 때, 
+		// 기차에 사람이 가장 많을 때의 사람 수를 계산하는 프로그램을 작성
+		
+		// 이전값 = (탄값 - 내린값)
+		// 현재값 = 이전값 + (탄값 - 내린값)
 
 		
-		// 1. 내 정답
-		int a = sc.nextInt();
-		int b = sc.nextInt();
-		
-		// 1. String 형태로 변환
-		String aStr = String.valueOf(a);
-		String bStr = String.valueOf(b);
-		// 2. char 배열로 담기
-		char[] aCharArr = aStr.toCharArray();
-		char[] bCharArr = bStr.toCharArray();
-		aStr = "";
-		bStr = "";
-		// 3. 역순으로 정렬
-		for(int i = 2; i >= 0; i--) {
-			aStr += aCharArr[i];
-		}
-		for(int i = 2; i >= 0; i--) {
-			bStr += bCharArr[i];
-		}
-		a = Integer.parseInt(aStr);
-		b = Integer.parseInt(bStr);
-		
-		System.out.println(Math.max(a, b));
-		
-		
-		// 2. 더 나은 정답
-//		// StringBuilder의 reverse 매서드를 이용하는 방법
+		// 오답
+//		// 1번역
+//		int[][] station = new int[4][2];
+//		station[0][0] = 0;//sc.nextInt();
+//		station[0][1] = 32;//sc.nextInt();
+//		// 2번역
+//		station[1][0] = 3;//sc.nextInt();
+//		station[1][1] = 13;//sc.nextInt();
+//		// 3번역
+//		station[2][0] = 28;//sc.nextInt();
+//		station[2][1] = 25;//sc.nextInt();
+//		// 4번역
+//		station[3][0] = 39;//sc.nextInt();
+//		station[3][1] = 0;//sc.nextInt();
 //		
-//		int A = sc.nextInt();
-//		int B = sc.nextInt();
-//        
-//		A = Integer.parseInt(new StringBuilder().append(A).reverse().toString());
-//		B = Integer.parseInt(new StringBuilder().append(B).reverse().toString());
+//		// 최대 인원 전역 번수
+//		int max = station[0][1];
+//		// 이전 인원 수를 담아둘 전역 변수
+//		int curMax = 0;
 //		
-//		System.out.print(A > B ? A : B);  // Math 유틸을 이용하지 않고 삼항연산자로 처리
+//		for(int i = 0; i < 4; i++) {
+//			if(i == 3) {
+//				curMax = (station[2][1] - station[2][0]) + (station[3][0]);
+//			} else {
+//				curMax = (station[i][1] - station[i][0]) + (station[i+1][1] - station[i+1][0]);
+//			}
+//			if(max < curMax) {
+//				max = curMax;
+//			}
+//		}
+		
+		// 정답
+		// 최대 인원 전역 번수
+		int max = 0;
+		// 이전 인원 수를 담아둘 전역 변수
+		int curMax = 0;
+		// 내린 인원
+		int out = 0;
+		// 타는 인원
+		int in = 0;
+		
+		for(int i = 0; i < 4; i++) {
+			out = sc.nextInt();
+			in = sc.nextInt();
+			
+			curMax = curMax + in - out;
+			
+			if(max < curMax) {
+				max = curMax;
+			}
+		}
+		
+		
+		System.out.println(max);
 
 		sc.close();
 	}
