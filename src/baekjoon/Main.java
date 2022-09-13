@@ -5,98 +5,112 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
+	
+	public static StringBuilder sb = new StringBuilder();
 
 	public static void main(String[] args) throws IOException {
 		
-		// 1300번 
-		// K번째 수
-		// https://www.acmicpc.net/problem/1300
+		// 11729번 
+		// 하노이 탑 이동 순서
+		// https://www.acmicpc.net/problem/11729
 		
 		// 문제
 		/*
-			세준이는 크기가 N×N인 배열 A를 만들었다. 
-			배열에 들어있는 수 A[i][j] = i×j 이다. 
-			이 수를 일차원 배열 B에 넣으면 B의 크기는 N×N이 된다. 
-			B를 오름차순 정렬했을 때, B[k]를 구해보자.
+			세 개의 장대가 있고 첫 번째 장대에는 반경이 서로 다른 n개의 원판이 쌓여 있다. 
+			각 원판은 반경이 큰 순서대로 쌓여있다. 
+			이제 수도승들이 다음 규칙에 따라 첫 번째 장대에서 세 번째 장대로 옮기려 한다.
 
-			배열 A와 B의 인덱스는 1부터 시작한다.
+			한 번에 한 개의 원판만을 다른 탑으로 옮길 수 있다.
+			쌓아 놓은 원판은 항상 위의 것이 아래의 것보다 작아야 한다.
+			이 작업을 수행하는데 필요한 이동 순서를 출력하는 프로그램을 작성하라. 단, 이동 횟수는 최소가 되어야 한다.
+			
+			아래 그림은 원판이 5개인 경우의 예시이다.
 		*/
 		
 		// 입력
 		/*
-			첫째 줄에 배열의 크기 N이 주어진다. 
-			N은 105보다 작거나 같은 자연수이다. 
-			둘째 줄에 k가 주어진다. 
-			k는 min(109, N2)보다 작거나 같은 자연수이다.
+			첫째 줄에 첫 번째 장대에 쌓인 원판의 개수 N (1 ≤ N ≤ 20)이 주어진다.
 		*/
 		
 		// 출력
 		/*
-		 	B[k]를 출력한다.
+		 	첫째 줄에 옮긴 횟수 K를 출력한다.
+			두 번째 줄부터 수행 과정을 출력한다. 
+			두 번째 줄부터 K개의 줄에 걸쳐 두 정수 A B를 빈칸을 사이에 두고 출력하는데, 
+			이는 A번째 탑의 가장 위에 있는 원판을 B번째 탑의 가장 위로 옮긴다는 뜻이다.
 		*/
 			
 		// 예제 입력
 		/* 
 			3
-			7
 		*/
 		
 		// 답
 		/* 
-		 	6
+		 	7
+			1 3
+			1 2
+			3 2
+			1 3
+			2 1
+			2 3
+			1 3
 		*/
 		
 		
 		
 		// POINT
-		// 크기가 N×N인 배열 A를 만들었다. 
-		// 배열에 들어있는 수 A[i][j] = i×j 이다. 
-		// 이 수를 일차원 배열 B에 넣으면 B의 크기는 N×N이 된다. 
-		// B를 오름차순 정렬했을 때, B[k]를 구해보자????????????
+		// 세 개의 장대가 있고 첫 번째 장대에는 반경이 서로 다른 n개의 원판이 쌓여 있다. 
+		// 각 원판은 반경이 큰 순서대로 쌓여 
+		// 첫 번째 장대에서 세 번째 장대로 옮기려 한다.
 		
-		// 첫째 줄에 배열의 크기 N 
-		// N은 105보다 작거나 같은 자연수이다. 
-		// 둘째 줄에 k 
-		// k는 min(109, N2)보다 작거나 같은 자연수
+		// 한 번에 한 개의 원판만을 다른 탑으로 옮길 수 있다.
+		// 쌓아 놓은 원판은 항상 위의 것이 아래의 것보다 작아야 한다.
+		// 단, 이동 횟수는 최소가 되어야 한다.
+		
+		// 첫째 줄에 옮긴 횟수 K를 출력한다.
+		// 두 번째 줄부터 수행 과정을 출력한다. 
+		// 두 번째 줄부터 K개의 줄에 걸쳐 두 정수 A B를 빈칸을 사이에 두고 출력하는데, 
+		// 이는 A번째 탑의 가장 위에 있는 원판을 B번째 탑의 가장 위로 옮긴다는 뜻이다.
 
 		
-		// 문제의 본질은 다음과 같다. A[i][j] = i * j 로 이루어져있는 행렬들을 
-		// 1차원 배열 B로 만들 때 B[k]의 값은 무엇인지를 찾는 문제다.
+		// 재귀를 통해 '가장 작은 단위' 가 될 때 까지 재귀호출을 하고, 
+		// 가장 작은 단위까지 호출이 되었으면, 거기서 구현한 연산을 실행하면 된다.
+		// 하노이탑 개수와 상관없이, 일정 규칙을 찾고, 최소 단위를 생각
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		 
 		int N = Integer.parseInt(br.readLine());
-		int K = Integer.parseInt(br.readLine());
-		
-		// x는 lo <= x <= hi 의 범위를 갖는다.
-		long lo = 1;
-		long hi = K;
-		
-		// lower-bound
-		while(lo < hi) {
-			
-			long mid = (lo + hi) / 2;	// 임의의 x(mid)를 중간 값으로 잡는다.
-			long count = 0;
-			
-			/*
-			 *  임의의 x에 대해 i번 째 행을 나눔으로써 x보다 작거나 같은 원소의 개수
-			 *  누적 합을 구한다.
-			 *  이 때 각 행의 원소의 개수가 N(열 개수)를 초과하지 않는 선에서 합해주어야 한다.   
-			 */
-			for(int i = 1; i <= N; i++) {
-				count += Math.min(mid / i, N);
-			}
-			
-			// count가 많다는 것은 임의의 x(mid)보다 작은 수가 B[K]보다 많다는 뜻
-			if(K <= count) {
-				hi = mid;
-			}
-			else {
-				lo = mid + 1;
-			}
-		}
-		
-		System.out.println(lo);
+ 
+		sb.append((int) (Math.pow(2, N) - 1)).append('\n');
+ 
+		Hanoi(N, 1, 2, 3);
+		System.out.println(sb);
 
+	}
+	
+	/*
+		N : 원판의 개수 
+		start : 출발지 
+		mid : 옮기기 위해 이동해야 장소 
+		to : 목적지
+	 */
+	public static void Hanoi(int N, int start, int mid, int to) {
+		// 이동할 원반의 수가 1개라면?
+		if (N == 1) {
+			sb.append(start + " " + to + "\n");
+			return;
+		}
+ 
+		// A -> C로 옮긴다고 가정할 떄,
+		// STEP 1 : N-1개를 A에서 B로 이동 (= start 지점의 N-1개의 원판을 mid 지점으로 옮긴다.)
+		Hanoi(N - 1, start, to, mid);
+    
+		// STEP 2 : 1개를 A에서 C로 이동 (= start 지점의 N번째 원판을 to지점으로 옮긴다.)
+		sb.append(start + " " + to + "\n");
+    
+		// STEP 3 : N-1개를 B에서 C로 이동 (= mid 지점의 N-1개의 원판을 to 지점으로 옮긴다.)
+		Hanoi(N - 1, mid, start, to);
 	}
 	
 	// 정답: https://st-lab.tistory.com/281
