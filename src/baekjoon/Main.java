@@ -3,115 +3,102 @@ package baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
 
 public class Main {
-	
-	static int n;
-    static int check[]; // 방문 완료
-    static int bridge[]; // 돌다리
-    static int dir[] = {1, -1}; // 왼쪽 방향, 오른쪽 방향
-    static int cnt = 1; // 시작 지점도 방문한 것이니 1로 초기화
 
 	public static void main(String[] args) throws IOException {
 		
-		// 14248번 
-		// 점프 점프
-		// https://www.acmicpc.net/problem/14248
+		// 1300번 
+		// K번째 수
+		// https://www.acmicpc.net/problem/1300
 		
 		// 문제
 		/*
-			영우는 개구리다 개굴개굴개굴
+			세준이는 크기가 N×N인 배열 A를 만들었다. 
+			배열에 들어있는 수 A[i][j] = i×j 이다. 
+			이 수를 일차원 배열 B에 넣으면 B의 크기는 N×N이 된다. 
+			B를 오름차순 정렬했을 때, B[k]를 구해보자.
 
-			영우는 지금 n개의 돌이 일렬로 놓여있는 돌다리에 있다. 
-			그리고 돌다리의 돌에는 숫자가 하나씩 적혀있다. 
-			영우는 이 숫자가 적혀있는 만큼 왼쪽이나 오른쪽으로 점프할 수 있는데, 이때 돌다리 밖으로 나갈 수는 없다.
-			
-			영우는 이 돌다리에서 자기가 방문 가능한 돌들의 개수를 알고 싶어한다. 
-			방문 가능하다는 것은 현재위치에서 다른 돌을 적절히 밟아 해당하는 위치로 이동이 가능하다는 뜻이다.
-			
-			현재 위치가 주어졌을 때, 영우가 방문 가능한 돌들의 개수를 출력하시오.
+			배열 A와 B의 인덱스는 1부터 시작한다.
 		*/
 		
 		// 입력
 		/*
-			첫 번째 줄에는 돌다리의 돌 개수 n이 주어진다.(1≤n≤100,000) 
-			돌의 번호는 왼쪽부터 1번에서 n번이다. 
-			다음 줄에는 그 위치에서 점프할 수 있는 거리 Ai가 주어진다.(1≤Ai≤100,000)
-
-			다음 줄에는 출발점 s가 주어진다.(1≤s≤n)
+			첫째 줄에 배열의 크기 N이 주어진다. 
+			N은 105보다 작거나 같은 자연수이다. 
+			둘째 줄에 k가 주어진다. 
+			k는 min(109, N2)보다 작거나 같은 자연수이다.
 		*/
 		
 		// 출력
 		/*
-		 	영우가 방문 가능한 돌들의 개수를 출력하시오.
+		 	B[k]를 출력한다.
 		*/
 			
 		// 예제 입력
 		/* 
-			5
-			1 4 2 2 1
 			3
+			7
 		*/
 		
 		// 답
 		/* 
-		 	5
+		 	6
 		*/
 		
 		
 		
 		// POINT
-		// 숫자가 적혀있는 만큼 왼쪽이나 오른쪽으로 점프할 수 있는데, 이때 돌다리 밖으로 나갈 수는 없다.
-		// 자기가 방문 가능한 돌들의 개수???
+		// 크기가 N×N인 배열 A를 만들었다. 
+		// 배열에 들어있는 수 A[i][j] = i×j 이다. 
+		// 이 수를 일차원 배열 B에 넣으면 B의 크기는 N×N이 된다. 
+		// B를 오름차순 정렬했을 때, B[k]를 구해보자????????????
 		
-		// 돌의 번호는 왼쪽부터 1번에서 n번
-		// 다음 줄에는 그 위치에서 점프할 수 있는 거리 Ai
-		// 다음 줄에는 출발점 s
+		// 첫째 줄에 배열의 크기 N 
+		// N은 105보다 작거나 같은 자연수이다. 
+		// 둘째 줄에 k 
+		// k는 min(109, N2)보다 작거나 같은 자연수
+
 		
-		// 현재 위치가 주어졌을 때, 영우가 방문 가능한 돌들의 개수를 출력
-		
+		// 문제의 본질은 다음과 같다. A[i][j] = i * j 로 이루어져있는 행렬들을 
+		// 1차원 배열 B로 만들 때 B[k]의 값은 무엇인지를 찾는 문제다.
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
-        bridge = new int[n]; 
-        check = new int[n]; 
-        
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        
-        // 돌다리 담기
-        for (int i = 0; i < n; i++) {
-            bridge[i] = Integer.parseInt(st.nextToken());
-        }
-
-        int s = Integer.parseInt(br.readLine()); // 시작지점
-        System.out.println(bfs(s-1)); // 배열 인덱스는 s-1
+		int N = Integer.parseInt(br.readLine());
+		int K = Integer.parseInt(br.readLine());
+		
+		// x는 lo <= x <= hi 의 범위를 갖는다.
+		long lo = 1;
+		long hi = K;
+		
+		// lower-bound
+		while(lo < hi) {
+			
+			long mid = (lo + hi) / 2;	// 임의의 x(mid)를 중간 값으로 잡는다.
+			long count = 0;
+			
+			/*
+			 *  임의의 x에 대해 i번 째 행을 나눔으로써 x보다 작거나 같은 원소의 개수
+			 *  누적 합을 구한다.
+			 *  이 때 각 행의 원소의 개수가 N(열 개수)를 초과하지 않는 선에서 합해주어야 한다.   
+			 */
+			for(int i = 1; i <= N; i++) {
+				count += Math.min(mid / i, N);
+			}
+			
+			// count가 많다는 것은 임의의 x(mid)보다 작은 수가 B[K]보다 많다는 뜻
+			if(K <= count) {
+				hi = mid;
+			}
+			else {
+				lo = mid + 1;
+			}
+		}
+		
+		System.out.println(lo);
 
 	}
 	
-	public static int bfs(int node) {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.offer(node);
-        check[node] = 1; // 방문한 곳 체크
-        
-        while (!queue.isEmpty()) {
-            node = queue.poll();
-            int jump = bridge[node];
-            for (int d : dir) {
-                int direction = (d * jump) + node;
-                if (direction >= 0 && direction < n && check[direction] == 0) {
-                    check[direction] = 1;
-                    queue.offer(direction);
-                    cnt++;
-                }
-            }
-        }
-        return cnt;
-    }
-	
-	
-	// 정답: https://connie.tistory.com/m/16
+	// 정답: https://st-lab.tistory.com/281
 
 }
