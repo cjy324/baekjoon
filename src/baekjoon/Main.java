@@ -1,96 +1,96 @@
 package baekjoon;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException {
 		
-		// 12738번 
-		// 가장 긴 증가하는 부분 수열 3
-		// https://www.acmicpc.net/problem/12738
+		// 9095번 
+		// 1, 2, 3 더하기
+		// https://www.acmicpc.net/problem/9095
 		
 		// 문제
 		/*
-			수열 A가 주어졌을 때, 가장 긴 증가하는 부분 수열을 구하는 프로그램을 작성하시오.
+			정수 4를 1, 2, 3의 합으로 나타내는 방법은 총 7가지가 있다. 합을 나타낼 때는 수를 1개 이상 사용해야 한다.
 
-			예를 들어, 수열 A = {10, 20, 10, 30, 20, 50} 인 경우에 
-			가장 긴 증가하는 부분 수열은 A = {10, 20, 10, 30, 20, 50} 이고, 길이는 4이다.
+			1+1+1+1
+			1+1+2
+			1+2+1
+			2+1+1
+			2+2
+			1+3
+			3+1
+			
+			정수 n이 주어졌을 때, n을 1, 2, 3의 합으로 나타내는 방법의 수를 구하는 프로그램을 작성하시오.
 		*/
 		
 		// 입력
 		/*
-			첫째 줄에 수열 A의 크기 N (1 ≤ N ≤ 1,000,000)이 주어진다.
-
-			둘째 줄에는 수열 A를 이루고 있는 Ai가 주어진다. 
-			(-1,000,000,000 ≤ Ai ≤ 1,000,000,000)
+			첫째 줄에 테스트 케이스의 개수 T가 주어진다. 
+			각 테스트 케이스는 한 줄로 이루어져 있고, 정수 n이 주어진다. 
+			n은 양수이며 11보다 작다.
 		*/
 		
 		// 출력
 		/*
-		 	첫째 줄에 수열 A의 가장 긴 증가하는 부분 수열의 길이를 출력한다.
+		 	각 테스트 케이스마다, n을 1, 2, 3의 합으로 나타내는 방법의 수를 출력한다.
 		*/
 			
 		// 예제 입력
 		/* 
-			6
-			10 20 10 30 20 50
+			3
+			4
+			7
+			10
 		*/
 		
 		// 답
 		/* 
-		 	4
+		 	7
+			44
+			274
 		*/
 		
 		
 		// POINT
-		// 1. 리스트의 마지막 보다 크면 삽입
-		// 2. 리스트의 마지막 보다 작으면 리스트 이진 탐색으로 적절한 위치에 삽입
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-	    ArrayList<Integer> list = new ArrayList<>();
+		// 우선 1, 2, 3을 만들 수 있는 경우의 수를 만들어야 함 
+		// 1 = {1}로 한 개, 
+		// 2 = {1+1, 2}로 2개, 
+		// 3 = {1+1+1, 1+2, 2+1, 3}으로 4개이다.
+		// d[4]를 생각할 때
 
-		int n = Integer.parseInt(br.readLine());
-		int val = 0;
+		// 4는 1 + 3 이다. 3을 1, 2, 3 더하기로 하였을 때의 경우의 수는 4가지이다.
+		// 4는 2 + 2이다. 2를 1, 2, 3 더하기로 하였을 때의 경우의 수는 2가지이다.
+		// 4는 3 + 1이다. 3을 1, 2, 3 더하기로 하였을 때의 경우의 수는 1가지이다.
+		// 즉, 4 + 2 + 1을 하면 7가지가 된다.
 		
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        
-        for(int i = 0; i < n; i++) {
-        	val = Integer.parseInt(st.nextToken());
-        	
-        	if(list.get(list.size() - 1) < val) {
-        		list.add(val);
-        	} else {
-        		int left = 1;
-        		int right = list.size() - 1;
-        		
-        		while(left < right) {
-        			int mid = (left + right) / 2;
-        			if(list.get(mid) < val) {
-        				left = mid + 1;
-        			} else {
-        				right = mid;
-        			}
-        		}
-        		list.set(right, val);
-        	}
-        	
-        }
+		Scanner sc = new Scanner(System.in);
+		
+		int num = sc.nextInt();
+		
+		int[] array = new int[11];
+		
+		array[0] = 0;
+		array[1] = 1;
+		array[2] = 2;
+		array[3] = 4;
+		
 
-        bw.write((list.size() - 1) + "");
-        bw.flush();
-        br.close();
-        bw.close();
+		int a = 0;
+		for(int i = 0; i < num; i++) {
+			a = sc.nextInt();
+			for(int j = 4; j <= a; j++) {
+				array[j] = array[j - 1] + array[j - 2] + array[j - 3];
+			}
+			System.out.println(array[a]);
+		}
+		
+		sc.close();
 
 	}
 	
-	// 정답: https://gre-eny.tistory.com/24
+	// 정답: https://fbtmdwhd33.tistory.com/73
 
 }
