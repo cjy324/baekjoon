@@ -1,96 +1,116 @@
 package baekjoon;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
+	
+	static Integer[][] dp;
+	static int[] W; // weight
+	static int[] V; // value
 
 	public static void main(String[] args) throws IOException {
 		
-		// 9095번 
-		// 1, 2, 3 더하기
-		// https://www.acmicpc.net/problem/9095
+		// 12865번 
+		// 평범한 배낭
+		// https://www.acmicpc.net/problem/12865
 		
 		// 문제
 		/*
-			정수 4를 1, 2, 3의 합으로 나타내는 방법은 총 7가지가 있다. 합을 나타낼 때는 수를 1개 이상 사용해야 한다.
+			이 문제는 아주 평범한 배낭에 관한 문제이다.
 
-			1+1+1+1
-			1+1+2
-			1+2+1
-			2+1+1
-			2+2
-			1+3
-			3+1
+			한 달 후면 국가의 부름을 받게 되는 준서는 여행을 가려고 한다. 			
+			세상과의 단절을 슬퍼하며 최대한 즐기기 위한 여행이기 때문에, 
+			가지고 다닐 배낭 또한 최대한 가치 있게 싸려고 한다.
+
+			준서가 여행에 필요하다고 생각하는 N개의 물건이 있다. 
+			각 물건은 무게 W와 가치 V를 가지는데, 
 			
-			정수 n이 주어졌을 때, n을 1, 2, 3의 합으로 나타내는 방법의 수를 구하는 프로그램을 작성하시오.
+			해당 물건을 배낭에 넣어서 가면 준서가 V만큼 즐길 수 있다. 
+			아직 행군을 해본 적이 없는 준서는 최대 K만큼의 무게만을 넣을 수 있는 배낭만 들고 다닐 수 있다. 
+			준서가 최대한 즐거운 여행을 하기 위해 배낭에 넣을 수 있는 물건들의 가치의 최댓값을 알려주자.
 		*/
 		
 		// 입력
 		/*
-			첫째 줄에 테스트 케이스의 개수 T가 주어진다. 
-			각 테스트 케이스는 한 줄로 이루어져 있고, 정수 n이 주어진다. 
-			n은 양수이며 11보다 작다.
+			첫 줄에 물품의 수 N(1 ≤ N ≤ 100)과 
+			준서가 버틸 수 있는 무게 K(1 ≤ K ≤ 100,000)가 주어진다. 
+			두 번째 줄부터 N개의 줄에 거쳐 각 물건의 무게 W(1 ≤ W ≤ 100,000)와 
+			해당 물건의 가치 V(0 ≤ V ≤ 1,000)가 주어진다.
+
+			입력으로 주어지는 모든 수는 정수이다.
 		*/
 		
 		// 출력
 		/*
-		 	각 테스트 케이스마다, n을 1, 2, 3의 합으로 나타내는 방법의 수를 출력한다.
+		 	한 줄에 배낭에 넣을 수 있는 물건들의 가치합의 최댓값을 출력한다.
 		*/
 			
 		// 예제 입력
 		/* 
-			3
-			4
-			7
-			10
+			4 7
+			6 13
+			4 8
+			3 6
+			5 12
 		*/
 		
 		// 답
 		/* 
-		 	7
-			44
-			274
+		 	14
 		*/
 		
 		
 		// POINT
-		// 우선 1, 2, 3을 만들 수 있는 경우의 수를 만들어야 함 
-		// 1 = {1}로 한 개, 
-		// 2 = {1+1, 2}로 2개, 
-		// 3 = {1+1+1, 1+2, 2+1, 3}으로 4개이다.
-		// d[4]를 생각할 때
-
-		// 4는 1 + 3 이다. 3을 1, 2, 3 더하기로 하였을 때의 경우의 수는 4가지이다.
-		// 4는 2 + 2이다. 2를 1, 2, 3 더하기로 하였을 때의 경우의 수는 2가지이다.
-		// 4는 3 + 1이다. 3을 1, 2, 3 더하기로 하였을 때의 경우의 수는 1가지이다.
-		// 즉, 4 + 2 + 1을 하면 7가지가 된다.
+		// 배낭에 넣을 수 있는 최댓값이 정해지고 해당 한도 물건을 넣어 가치의 합이 최대가 되도록 고르는 방법을 찾는 것이다. 
+		// 즉, 조합 최적화 문제다.
 		
-		Scanner sc = new Scanner(System.in);
 		
-		int num = sc.nextInt();
-		
-		int[] array = new int[11];
-		
-		array[0] = 0;
-		array[1] = 1;
-		array[2] = 2;
-		array[3] = 4;
-		
-
-		int a = 0;
-		for(int i = 0; i < num; i++) {
-			a = sc.nextInt();
-			for(int j = 4; j <= a; j++) {
-				array[j] = array[j - 1] + array[j - 2] + array[j - 3];
-			}
-			System.out.println(array[a]);
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		 
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+ 
+		int N = Integer.parseInt(st.nextToken());
+		int K = Integer.parseInt(st.nextToken());
+ 
+		W = new int[N];
+		V = new int[N];
+ 
+		dp = new Integer[N][K + 1];
+ 
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine(), " ");
+			W[i] = Integer.parseInt(st.nextToken());
+			V[i] = Integer.parseInt(st.nextToken());
 		}
-		
-		sc.close();
+ 
+		System.out.println(knapsack(N - 1, K));
 
 	}
 	
-	// 정답: https://fbtmdwhd33.tistory.com/73
+	static int knapsack(int i, int k) {
+		// i가 0미만, 즉 범위 밖이 된다면
+		if (i < 0)
+			return 0;
+		
+		// 탐색하지 않은 위치라면?
+		if (dp[i][k] == null) {
+			
+			// 현재 물건(i)을 추가로 못담는 경우 (이전 i값 탐색) 
+			if(W[i] > k) {
+				dp[i][k] = knapsack(i - 1, k);
+			}
+			// 현재 물건(i)을 담을 수 있는 경우 
+			else {
+				// 이전 i값과 이전 i값에 대한 k-W[i]의 값 + 현재 가치(V[i])중 큰 값을 저장  
+				dp[i][k] = Math.max(knapsack(i - 1, k), knapsack(i - 1, k - W[i]) + V[i]);
+			}
+		}
+		return dp[i][k];
+	}
+	
+	// 정답: https://st-lab.tistory.com/141
 
 }
